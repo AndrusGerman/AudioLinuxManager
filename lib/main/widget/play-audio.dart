@@ -11,13 +11,25 @@ class PlayAudio extends StatefulWidget {
 class _PlayAudioState extends State<PlayAudio> {
   @override
   Widget build(BuildContext context) {
-    return InkWell(
+    final ct = InkWell(
       onTap: () {
-        audioPlayer!.play("http://192.168.101.16:1323/");
+        print("play");
+        audioPlayer!
+            .play("http://192.168.101.16:1323/", isLocal: false)
+            .then((value) {
+          print("play ok");
+        }).catchError((onError) {
+          print("play error $onError");
+        });
       },
       child: Container(
         color: Colors.green,
       ),
+    );
+    return SizedBox(
+      height: MediaQuery.of(context).size.height / 2,
+      width: double.infinity,
+      child: ct,
     );
   }
 
@@ -32,7 +44,8 @@ class _PlayAudioState extends State<PlayAudio> {
 
   @override
   void initState() {
-    AudioPlayer audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+    audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
+
     // TODO: implement initState
     super.initState();
   }

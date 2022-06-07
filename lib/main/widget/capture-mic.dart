@@ -32,7 +32,7 @@ class _CaptureMicState extends State<CaptureMic> {
     return InkWell(
       onTap: clickRecording,
       child: SizedBox(
-        height: double.infinity,
+        height: MediaQuery.of(context).size.height / 2,
         width: double.infinity,
         child: contenButton,
       ),
