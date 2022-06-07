@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:mic_stream/mic_stream.dart';
 
 class CaptureMic extends StatefulWidget {
-  CaptureMic({Key? key}) : super(key: key) {}
+  const CaptureMic({Key? key}) : super(key: key);
 
   @override
   State<CaptureMic> createState() => _CaptureMicState();
