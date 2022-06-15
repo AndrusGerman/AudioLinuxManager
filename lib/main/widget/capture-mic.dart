@@ -59,13 +59,13 @@ class _CaptureMicState extends State<CaptureMic> {
   }
 
   startMic() async {
-    _socket = await Socket.connect('192.168.101.16', 8080);
+    _socket = await Socket.connect('192.168.101.18', 8080);
 
     // Init a new Stream
     final stream = await MicStream.microphone(
       audioSource: AudioSource.MIC,
-      sampleRate: 41000,
-      channelConfig: ChannelConfig.CHANNEL_IN_MONO,
+      sampleRate: 44100,
+      channelConfig: ChannelConfig.CHANNEL_IN_STEREO,
       audioFormat: AudioFormat.ENCODING_PCM_16BIT,
     );
 
