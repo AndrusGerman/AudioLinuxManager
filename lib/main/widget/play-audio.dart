@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+//import 'package:audioplayers/audioplayers.dart';
+// import 'package:audio_session/audio_session.dart';
+
+// import 'package:just_audio/just_audio.dart';
 
 class PlayAudio extends StatefulWidget {
   const PlayAudio({Key? key}) : super(key: key);
@@ -9,18 +12,14 @@ class PlayAudio extends StatefulWidget {
 }
 
 class _PlayAudioState extends State<PlayAudio> {
+  //final _player = AudioPlayer();
+
   @override
   Widget build(BuildContext context) {
     final ct = InkWell(
       onTap: () {
-        print("play");
-        audioPlayer!
-            .play("http://192.168.101.16:1323/", isLocal: false)
-            .then((value) {
-          print("play ok");
-        }).catchError((onError) {
-          print("play error $onError");
-        });
+        print("Play");
+        _init();
       },
       child: Container(
         color: Colors.green,
@@ -33,19 +32,35 @@ class _PlayAudioState extends State<PlayAudio> {
     );
   }
 
+  Future<void> _init() async {
+    // Inform the operating system of our app's audio attributes etc.
+    // We pick a reasonable default for an app that plays speech.
+    // final session = await AudioSession.instance;
+    // await session.configure(const AudioSessionConfiguration.speech());
+    // // Listen to errors during playback.
+    // _player.playbackEventStream.listen((event) {},
+    //     onError: (Object e, StackTrace stackTrace) {
+    //   print('A stream error occurred: $e');
+    // });
+    // // Try to load audio from a source and catch any errors.
+    // try {
+    //   // AAC example: https://dl.espressif.com/dl/audio/ff-16b-2c-44100hz.aac
+    //   await _player.setAudioSource(
+    //       AudioSource.uri(Uri.parse("http://192.168.101.16:1323/file.wav")));
+    // } catch (e) {
+    //   print("Error loading audio source: $e");
+    // }
+  }
+
   @override
   void dispose() {
-    audioPlayer!.dispose();
+    //_player.dispose();
     // TODO: implement dispose
     super.dispose();
   }
 
-  AudioPlayer? audioPlayer;
-
   @override
   void initState() {
-    audioPlayer = AudioPlayer(mode: PlayerMode.LOW_LATENCY);
-
     // TODO: implement initState
     super.initState();
   }
