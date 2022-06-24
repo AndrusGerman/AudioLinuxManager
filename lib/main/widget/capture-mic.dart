@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mic_stream/mic_stream.dart';
+import 'capture-mic-input-port.dart';
 
 class CaptureMic extends StatefulWidget {
   const CaptureMic({Key? key}) : super(key: key);
@@ -18,14 +19,17 @@ class _CaptureMicState extends State<CaptureMic> {
 
   @override
   Widget build(BuildContext context) {
+    final status = Text(isRecording ? "Recording..." : "Start",
+        style: const TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 40,
+        ));
     final contenButton = Container(
       color: isRecording ? Colors.redAccent : Colors.amber,
-      child: Center(
-        child: Text(isRecording ? "Recording..." : "Start",
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-              fontSize: 40,
-            )),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [status, CaptureMicInputPort(textController: textController)],
       ),
     );
 
@@ -58,8 +62,11 @@ class _CaptureMicState extends State<CaptureMic> {
     });
   }
 
+  final TextEditingController textController =
+      TextEditingController(text: '192.168.101.16');
+
   startMic() async {
-    _socket = await Socket.connect('192.168.101.18', 8080);
+    _socket = await Socket.connect(textController, 8080);
 
     // Init a new Stream
     final stream = await MicStream.microphone(
