@@ -35,14 +35,14 @@ class _CaptureMicState extends State<CaptureMic> {
       ),
     );
 
-    return InkWell(
+    return Expanded(
+        child: InkWell(
       onTap: clickRecording,
       child: SizedBox(
-        height: MediaQuery.of(context).size.height / 2,
         width: double.infinity,
         child: contenButton,
       ),
-    );
+    ));
   }
 
   clickRecording() async {
@@ -68,7 +68,8 @@ class _CaptureMicState extends State<CaptureMic> {
       TextEditingController(text: '192.168.101.16');
 
   startMic() async {
-    _socket = await Socket.connect(textController.value, 8080);
+    print('Host "${textController.value.text}"');
+    _socket = await Socket.connect(textController.value.text, 8080);
 
     // Init a new Stream
     final stream = await MicStream.microphone(
