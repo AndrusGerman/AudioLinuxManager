@@ -19,11 +19,13 @@ class _CaptureMicState extends State<CaptureMic> {
 
   @override
   Widget build(BuildContext context) {
+    // status mic
     final status = Text(isRecording ? "Recording..." : "Start",
         style: const TextStyle(
           fontWeight: FontWeight.bold,
           fontSize: 40,
         ));
+    // List Elements
     final contenButton = Container(
       color: isRecording ? Colors.redAccent : Colors.amber,
       child: Column(
@@ -66,7 +68,7 @@ class _CaptureMicState extends State<CaptureMic> {
       TextEditingController(text: '192.168.101.16');
 
   startMic() async {
-    _socket = await Socket.connect(textController, 8080);
+    _socket = await Socket.connect(textController.value, 8080);
 
     // Init a new Stream
     final stream = await MicStream.microphone(
