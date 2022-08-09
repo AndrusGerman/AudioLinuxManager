@@ -7,12 +7,13 @@ class CaptureMicInputPort extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        width: 260,
-        height: 70,
-        child: TextField(
-          controller: textController,
-          keyboardType: TextInputType.text,
-        ));
+    return SizedBox(
+      width: 260,
+      height: 70,
+      child: TextField(
+        controller: textController,
+        keyboardType: TextInputType.text,
+      ),
+    );
   }
 }

@@ -1,8 +1,9 @@
-import 'dart:async';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:mic_stream/mic_stream.dart';
+import 'package:mutex/mutex.dart';
+import 'package:wakelock/wakelock.dart';
 import 'capture-mic-input-port.dart';
 
 class CaptureMic extends StatefulWidget {
@@ -14,8 +15,8 @@ class CaptureMic extends StatefulWidget {
 
 class _CaptureMicState extends State<CaptureMic> {
   var isRecording = false;
-  StreamSubscription<List<int>>? _listener;
   Socket? _socket;
+  Mutex mt = Mutex();
 
   @override
   Widget build(BuildContext context) {
@@ -46,10 +47,7 @@ class _CaptureMicState extends State<CaptureMic> {
   }
 
   clickRecording() async {
-    if (isRecording) {
-      _socket!.close();
-      _listener!.cancel();
-    }
+    // init recording
     if (!isRecording) {
       try {
         await startMic();
@@ -58,6 +56,12 @@ class _CaptureMicState extends State<CaptureMic> {
         return;
       }
     }
+    // stop recording
+    if (isRecording) {
+      Wakelock.disable();
+      _socket?.close();
+      _socket = null;
+    }
 
     setState(() {
       isRecording = !isRecording;
@@ -65,12 +69,9 @@ class _CaptureMicState extends State<CaptureMic> {
   }
 
   final TextEditingController textController =
-      TextEditingController(text: '192.168.101.16');
+      TextEditingController(text: '192.168.10.109');
 
-  startMic() async {
-    print('Host "${textController.value.text}"');
-    _socket = await Socket.connect(textController.value.text, 8080);
-
+  _daemonMic() async {
     // Init a new Stream
     final stream = await MicStream.microphone(
       audioSource: AudioSource.MIC,
@@ -80,8 +81,25 @@ class _CaptureMicState extends State<CaptureMic> {
     );
 
     // Start listening to the stream
-    _listener = stream!.listen((samples) {
-      _socket!.add(samples);
+    stream?.listen((samples) {
+      _socket?.add(samples);
     });
+  }
+
+  startMic() async {
+    await mt.protect(() async {
+      Wakelock.enable();
+      if (_socket != null) {
+        _socket?.close();
+        _socket = null;
+      }
+      _socket = await Socket.connect(textController.value.text, 8080);
+    });
+  }
+
+  @override
+  void initState() {
+    _daemonMic();
+    super.initState();
   }
 }
