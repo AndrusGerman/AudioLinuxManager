@@ -9,18 +9,10 @@ class MainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Column(
-      children: [
+      children: const [
         CaptureMic(),
         PlayAudio(),
       ],
-    )
-        // body: Column(
-        //   children: [
-        //     CaptureMic(),
-
-        //     //PlayAudio(),
-        //   ],
-        // ),
-        );
+    ));
   }
 }
